@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ca">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LA REPRESENTACIÓ DE LA TERRA</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body,
+    html {
+      height: 100vh;
+      width: 100vw;
+      font-family: "Fedra Sans", sans-serif;
+      background-color: #007196;
+    }
+
+    .screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      text-align: center;
+      padding: 2vh;
+      color: white;
+      z-index: 10;
+    }
+
+    .screen.active {
+      display: flex;
+    }
+
+    .intro h1 {
+      font-size: 4vh;
+      margin-bottom: 2vh;
+    }
+
+    .intro p {
+      font-size: 2.5vh;
+      margin-bottom: 4vh;
+    }
+
+    .btn {
+      background-color: #fff;
+      color: #007196;
+      padding: 2vh 4vh;
+      font-size: 2.5vh;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: 0.3s;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn:hover {
+      background-color: #007196;
+      color: white;
+      border: 2px solid white;
+    }
+
+    #exerciseScreen {
+      display: none;
+      background-color: #f5f5f5;
+      color: #333;
+      height: 100vh;
+      width: 100vw;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      overflow: auto;
+    }
+
+    .exercise-content {
+      max-width: 1000px;
+      width: 100%;
+      padding: 30px;
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+      text-align: center;
+    }
+
+    .top-bar {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+    }
+
+    h2 {
+      color: #007196;
+      margin-bottom: 20px;
+      font-size: 2rem;
+    }
+
+    .diagram {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .branches {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 30px;
+      margin-top: 20px;
+    }
+
+    .branch {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      min-width: 180px;
+    }
+
+    input[type="text"] {
+      width: 180px;
+      padding: 10px;
+      border: none;
+      border-bottom: 2px solid #007196;
+      text-align: center;
+      font-size: 16px;
+      background-color: transparent;
+      color: #007196;
+      outline: none;
+    }
+
+    input[type="text"]::placeholder {
+      color: #007196;
+      opacity: 0.6;
+    }
+
+    .arrow {
+      font-size: 24px;
+      color: #007196;
+    }
+
+    span {
+      font-weight: bold;
+      color: #007196;
+    }
+
+    button.check-btn {
+      background-color: #007196;
+      color: white;
+      padding: 12px 24px;
+      margin-top: 25px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+
+    button.check-btn:hover {
+      background-color: #fff;
+      color: #007196;
+      border: 2px solid #007196;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .back-btn {
+      background-color: #bbb;
+      color: #333;
+      padding: 10px 15px;
+      border-radius: 8px;
+      font-size: 1.2em;
+      border: none;
+      cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+      .branches {
+        flex-direction: column;
+        gap: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Intro Screen -->
+  <div id="introScreen" class="screen intro active">
+    <h1>COMPLETA L'ESQUEMA SEGÜENT</h1>
+    <p>Completa els camps amb els noms correctes de la representació de la Terra.</p>
+    <button class="btn" onclick="startExercise()">Comença</button>
+  </div>
+
+  <!-- Exercise Screen -->
+  <div id="exerciseScreen" class="screen">
+    <div class="top-bar">
+      <button class="btn back-btn" onclick="goBack()">← Torna enrere</button>
+    </div>
+    <div class="exercise-content">
+      <h2>Exercici interactiu</h2>
+      <div class="diagram">
+        <span>LA REPRESENTACIÓ DE LA TERRA</span>
+        <div class="branches">
+          <!-- ESFERA Branch -->
+          <div class="branch">
+            <div class="arrow">⬇</div>
+            <input type="text" id="esfera" placeholder="..........................">
+            <div class="arrow">⬆</div>
+            <span>(ESFERA)</span>
+          </div>
+
+          <!-- MAPA Branch -->
+          <div class="branch">
+            <div class="arrow">⬇</div>
+            <span>MAPA</span>
+            <div class="arrow">⬇</div>
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 5px;">
+              <span>PROJECCIONS</span>
+              <input type="text" id="projectionsType" placeholder="..........................">
+            </div>
+
+            <div class="branches">
+              <div class="branch">
+                <input type="text" id="proj1" placeholder="..........................">
+              </div>
+              <div class="branch">
+                <input type="text" id="proj2" placeholder="..........................">
+              </div>
+              <div class="branch">
+                <input type="text" id="proj3" placeholder="..........................">
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="check-btn">Comprova</button>
+        <p id="result"></p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function startExercise() {
+      const elem = document.documentElement;
+      if (elem.requestFullscreen) {
+        elem.requestFullscreen();
+      }
+      document.getElementById("introScreen").classList.remove("active");
+      document.getElementById("exerciseScreen").style.display = "flex";
+    }
+
+    function goBack() {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      }
+      document.getElementById("introScreen").classList.add("active");
+      document.getElementById("exerciseScreen").style.display = "none";
+    }
+
+    function checkAnswers() {
+      const correctAnswers = {
+        esfera: ["esfera"],
+        projectionsType: ["cartogràfiques", "cartografiques"],
+        proj1: ["cilíndrica", "cylindrical"],
+        proj2: ["cònica", "conica", "conical"],
+        proj3: ["azimutal", "azimuthal"]
+      };
+
+
+      let score = 0;
+      let total = Object.keys(correctAnswers).length;
+
+      for (let id in correctAnswers) {
+        const input = document.getElementById(id);
+        const answer = input.value.trim().toLowerCase();
+        const valid = correctAnswers[id].map(a => a.toLowerCase());
+
+        if (valid.includes(answer)) {
+          input.style.border = "3px solid green";
+          input.style.color = "green";
+          score++;
+        } else {
+          input.style.border = "3px solid red";
+          input.style.color = "red";
+          input.value = `${input.value} ❌ → ${correctAnswers[id][0]}`;
+        }
+      }
+
+      document.getElementById("result").textContent = `Has obtingut ${score} de ${total} respostes correctes.`;
+    }
+
+    document.querySelector(".check-btn").addEventListener("click", checkAnswers);
+  </script>
+</body>
+
+</html>
